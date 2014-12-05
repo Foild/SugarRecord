@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import RestKit
 
 public class RestkitCDStack: DefaultCDStack
 {
@@ -27,7 +28,7 @@ public class RestkitCDStack: DefaultCDStack
         self.mainContext = store.mainQueueManagedObjectContext
         self.stackInitialized = true
     }
-    
+
     internal func createRKManagedObjectStore() -> RKManagedObjectStore
     {
         return RKManagedObjectStore(managedObjectModel: self.managedObjectModel!)
