@@ -15,7 +15,7 @@ public class SugarRecordResults<T>: SequenceType
     //MARK: - Attributes
     
     /// Array with the results of CoreData
-    private var coredataResults: [NSManagedObject]?
+    public var coredataResults: [NSManagedObject]?
     
     /// Array with the results of Realm
     private var realmResults: RLMResults?
