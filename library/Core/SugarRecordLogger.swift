@@ -28,20 +28,20 @@ public enum SugarRecordLogger: Int {
     func log(let logMessage: String) -> Bool {
         switch self {
         case .logLevelFatal:
-            print("SR-Fatal: \(logMessage) \n")
+            print("SR-Fatal: \(logMessage) \n", terminator: "")
             return true
         case .logLevelError:
             if SugarRecordLogger.currentLevel == .logLevelFatal {
                 return false
             }
-            print("SR-Error: \(logMessage) \n")
+            print("SR-Error: \(logMessage) \n", terminator: "")
             return true
         case .logLevelWarn:
             if SugarRecordLogger.currentLevel == .logLevelFatal ||
                 SugarRecordLogger.currentLevel == .logLevelError {
                     return false
             }
-            print("SR-Warm: \(logMessage) \n")
+            print("SR-Warm: \(logMessage) \n", terminator: "")
             return true
         case .logLevelInfo:
             if SugarRecordLogger.currentLevel == .logLevelFatal ||
@@ -49,7 +49,7 @@ public enum SugarRecordLogger: Int {
                 SugarRecordLogger.currentLevel == .logLevelWarn {
                     return false
             }
-            print("SR-Info: \(logMessage) \n")
+            print("SR-Info: \(logMessage) \n", terminator: "")
             return true
         default:
             if SugarRecordLogger.currentLevel == .logLevelFatal ||
@@ -58,7 +58,7 @@ public enum SugarRecordLogger: Int {
                 SugarRecordLogger.currentLevel == .logLevelInfo{
                     return false
             }
-            print("SR-Verbose: \(logMessage) \n")
+            print("SR-Verbose: \(logMessage) \n", terminator: "")
             return true
         }
     }

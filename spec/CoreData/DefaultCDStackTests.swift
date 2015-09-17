@@ -20,7 +20,7 @@ class DefaultCDStackTests: XCTestCase
         super.setUp()
         let bundle: NSBundle = NSBundle(forClass: CoreDataObjectTests.classForCoder())
         let modelPath: NSString = bundle.pathForResource("TestsDataModel", ofType: "momd")!
-        let model: NSManagedObjectModel = NSManagedObjectModel(contentsOfURL: NSURL(fileURLWithPath: modelPath)!)!
+        let model: NSManagedObjectModel = NSManagedObjectModel(contentsOfURL: NSURL(fileURLWithPath: modelPath as String)!)!
         stack = DefaultCDStack(databaseName: "TestDB.sqlite", model: model, automigrating: true)
         SugarRecord.addStack(stack!)
     }
@@ -104,7 +104,7 @@ class DefaultCDStackTests: XCTestCase
     
     func testBackgroundContextShouldHaveTheRootSavingContextAsParent()
     {
-        XCTAssertEqual((stack!.backgroundContext() as SugarRecordCDContext).contextCD.parentContext!, stack!.rootSavingContext!, "The private context should have the root saving context as parent")
+        XCTAssertEqual((stack!.backgroundContext() as! SugarRecordCDContext).contextCD.parentContext!, stack!.rootSavingContext!, "The private context should have the root saving context as parent")
     }
     
     func testMainContextShouldHaveTheRootSavingContextAsParent()
@@ -129,7 +129,7 @@ class DefaultCDStackTests: XCTestCase
     
     func testRootSavingContextConcurrencyType()
     {
-        XCTAssertEqual((stack!.backgroundContext() as SugarRecordCDContext).contextCD.concurrencyType, NSManagedObjectContextConcurrencyType.ConfinementConcurrencyType, "The concurrency type should be MainQueueConcurrencyType")
+        XCTAssertEqual((stack!.backgroundContext() as! SugarRecordCDContext).contextCD.concurrencyType, NSManagedObjectContextConcurrencyType.ConfinementConcurrencyType, "The concurrency type should be MainQueueConcurrencyType")
     }
     
     func testIfAddObserversForAutosaving()
@@ -137,7 +137,7 @@ class DefaultCDStackTests: XCTestCase
         class MockNotificationCenter: NSNotificationCenter
         {
             var addedNotificationName: String = ""
-            private override func addObserverForName(name: String?, object obj: AnyObject?, queue: NSOperationQueue?, usingBlock block: (NSNotification!) -> Void) -> NSObjectProtocol {
+            private override func addObserverForName(name: String?, object obj: AnyObject?, queue: NSOperationQueue?, usingBlock block: (NSNotification) -> Void) -> NSObjectProtocol {
                 addedNotificationName = name!
                 return NSObject()
             }
@@ -154,7 +154,7 @@ class DefaultCDStackTests: XCTestCase
         }
         let mockStack: MockDefaultStack = MockDefaultStack(databaseName: "test", automigrating: false)
         mockStack.addObservers()
-        let notificationCenter: MockNotificationCenter! = mockStack.notificationCenter() as MockNotificationCenter
+        let notificationCenter: MockNotificationCenter! = mockStack.notificationCenter() as! MockNotificationCenter
         XCTAssertEqual(notificationCenter.addedNotificationName, DefaultCDStack.Constants.autoSavingKVOKey, "The notification key should be \(DefaultCDStack.Constants.autoSavingKVOKey)")
     }
     

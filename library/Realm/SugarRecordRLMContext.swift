@@ -19,9 +19,9 @@ public class SugarRecordRLMContext: SugarRecordContext
     /**
     SugarRecordRLMContext initializer passing a RLMRealm object
     
-    :param: realmContext RLMRealm context linked to this SugarRecord context
+    - parameter realmContext: RLMRealm context linked to this SugarRecord context
     
-    :returns: Initialized SugarRecordRLMContext
+    - returns: Initialized SugarRecordRLMContext
     */
     init (realmContext: RLMRealm)
     {
@@ -55,36 +55,36 @@ public class SugarRecordRLMContext: SugarRecordContext
     /**
     Creates an object in the context
     
-    :param: objectClass ObectClass of the created object
+    - parameter objectClass: ObectClass of the created object
     
-    :returns: The created object in the context
+    - returns: The created object in the context
     */
     public func createObject(objectClass: AnyClass) -> AnyObject?
     {
-        let objectClass: RLMObject.Type = objectClass as RLMObject.Type
-        return objectClass()
+        let objectClass: RLMObject.Type = objectClass as! RLMObject.Type
+        return objectClass.init()
     }
     
     /**
     Insert an object in the context
     
-    :param: object Realm object to be inserted
+    - parameter object: Realm object to be inserted
     */
     public func insertObject(object: AnyObject)
     {
-        self.realmContext.addObject(object as RLMObject)
+        self.realmContext.addObject(object as! RLMObject)
     }
     
     /**
     Find Realm objects in the database using the passed finder
     
-    :param: finder SugarRecordFinder used for querying (filtering/sorting)
+    - parameter finder: SugarRecordFinder used for querying (filtering/sorting)
     
-    :returns: Objects fetched
+    - returns: Objects fetched
     */
     public func find<T>(finder: SugarRecordFinder<T>) -> SugarRecordResults<T>
     {
-        let objectClass: RLMObject.Type = finder.objectClass as RLMObject.Type
+        let objectClass: RLMObject.Type = finder.objectClass as! RLMObject.Type
         var filteredObjects: RLMResults? = nil
         if finder.predicate != nil {
             filteredObjects = objectClass.objectsWithPredicate(finder.predicate)
@@ -102,22 +102,22 @@ public class SugarRecordRLMContext: SugarRecordContext
     /**
     Deletes a given object
     
-    :param: object Realm object to be deleted
+    - parameter object: Realm object to be deleted
     
-    :returns: If the object has been properly deleted
+    - returns: If the object has been properly deleted
     */
     public func deleteObject<T>(object: T) -> SugarRecordContext
     {
-        self.realmContext.deleteObject(object as RLMObject)
+        self.realmContext.deleteObject(object as! RLMObject)
         return self
     }
     
     /**
     Deletes Realm objects from an array
     
-    :param: objects Realm objects to be deleted
+    - parameter objects: Realm objects to be deleted
     
-    :returns: If the delection has been successful
+    - returns: If the delection has been successful
     */
     public func deleteObjects<T>(objects: SugarRecordResults<T>) -> ()
     {
@@ -136,7 +136,7 @@ public class SugarRecordRLMContext: SugarRecordContext
     */
     public func count(objectClass: AnyClass, predicate: NSPredicate? = nil) -> Int
     {
-        let objectClass: RLMObject.Type = objectClass as RLMObject.Type
+        let objectClass: RLMObject.Type = objectClass as! RLMObject.Type
         var objects: RLMResults? = nil
         if predicate != nil {
             objects = objectClass.objectsWithPredicate(predicate)
