@@ -18,7 +18,7 @@ class SugarRecordResultsTests: XCTestCase
     func beforeEach()
     {
         // Core Data
-        var coreDataObject: CoreDataObject = CoreDataObject.create() as! CoreDataObject
+        let coreDataObject: CoreDataObject = CoreDataObject.create() as! CoreDataObject
         coreDataObject.name = "CD1"
         let saved: Bool = coreDataObject.save()
         var coreDataObject2: CoreDataObject = CoreDataObject.create() as! CoreDataObject
@@ -61,7 +61,7 @@ class SugarRecordResultsTests: XCTestCase
         super.setUp()
         let bundle: NSBundle = NSBundle(forClass: CoreDataObjectTests.classForCoder())
         let modelPath: NSString = bundle.pathForResource("TestsDataModel", ofType: "momd")!
-        let model: NSManagedObjectModel = NSManagedObjectModel(contentsOfURL: NSURL(fileURLWithPath: modelPath as String)!)!
+        let model: NSManagedObjectModel = NSManagedObjectModel(contentsOfURL: NSURL(fileURLWithPath: modelPath as String))!
         let stack: DefaultCDStack = DefaultCDStack(databaseName: "TestDB.sqlite", model: model, automigrating: true)
         SugarRecord.addStack(stack)
         
