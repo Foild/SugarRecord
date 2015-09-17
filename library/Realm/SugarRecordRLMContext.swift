@@ -94,7 +94,7 @@ public class SugarRecordRLMContext: SugarRecordContext
         }
         var sortedObjects: RLMResults = filteredObjects!
         for sorter in finder.sortDescriptors {
-            sortedObjects = sortedObjects.sortedResultsUsingProperty(sorter.key, ascending: sorter.ascending)
+            sortedObjects = sortedObjects.sortedResultsUsingProperty(sorter.key!, ascending: sorter.ascending)
         }
         return SugarRecordResults(realmResults: sortedObjects, finder: finder)
     }

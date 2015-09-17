@@ -20,6 +20,7 @@ Pod::Spec.new do |s|
 
   s.subspec "CoreData" do  |sp|
     sp.frameworks = 'CoreData'
+    sp.dependency 'Realm'
     sp.source_files = ['library/CoreData/Base/**/*.{swift}', 'library/Core/**/*.{swift}']
   end
 
