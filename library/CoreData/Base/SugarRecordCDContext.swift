@@ -97,7 +97,7 @@ public class SugarRecordCDContext: SugarRecordContext
         var objects: [AnyObject]?
         do {
             objects = try self.contextCD.executeFetchRequest(fetchRequest)
-        } catch var error1 as NSError {
+        } catch let error1 as NSError {
             error = error1
             objects = nil
         }

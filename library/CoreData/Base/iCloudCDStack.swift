@@ -261,7 +261,7 @@ public class iCloudCDStack: DefaultCDStack
                 if !fileManager.fileExistsAtPath(iCloudDataPath.path!) {
                     do {
                         try fileManager.createDirectoryAtPath(iCloudDataPath.path!, withIntermediateDirectories: true, attributes: nil)
-                    } catch var error1 as NSError {
+                    } catch let error1 as NSError {
                         error = error1
                     } catch {
                         fatalError()
@@ -282,7 +282,7 @@ public class iCloudCDStack: DefaultCDStack
                 var store: NSPersistentStore?
                 do {
                     store = try self!.persistentStoreCoordinator?.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: self!.databasePath, options: iCloudCDStack.icloudStoreOptions(contentNameKey: self!.icloudData!.iCloudAppID, contentURLKey: iCloudLogsPath))
-                } catch var error1 as NSError {
+                } catch let error1 as NSError {
                     error = error1
                     store = nil
                 } catch {

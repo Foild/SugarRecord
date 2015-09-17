@@ -74,7 +74,7 @@ extension RLMObject
     */
     public class func by(predicateString: NSString) -> SugarRecordFinder<RLMObject>
     {
-        var finder: SugarRecordFinder = SugarRecordFinder<RLMObject>()
+        let finder: SugarRecordFinder = SugarRecordFinder<RLMObject>()
         finder.setPredicate(predicateString as String)
         finder.objectClass = self
         finder.stackType = stackType()

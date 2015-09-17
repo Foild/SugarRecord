@@ -38,15 +38,15 @@ class StackTableViewController: UITableViewController
     // MARK: - Actions
     
     @IBAction func add(sender: AnyObject?) {
-        println("Abstract method, should be overriden")
+        print("Abstract method, should be overriden")
     }
     
     func fetchData() {
-        println("Abstract method, should be overriden")
+        print("Abstract method, should be overriden")
     }
     
     func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
-        println("Abstract method, should be overriden")
+        print("Abstract method, should be overriden")
     }
     
     func cellIdentifier() -> String {
@@ -59,7 +59,7 @@ class StackTableViewController: UITableViewController
     
     func dataCount() -> Int
     {
-        println("Abstract method, should be overriden")
+        print("Abstract method, should be overriden")
         return 0
     }
     

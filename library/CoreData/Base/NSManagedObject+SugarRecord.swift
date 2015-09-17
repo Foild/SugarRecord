@@ -72,7 +72,7 @@ extension NSManagedObject
     */
     public class func by(predicateString: NSString) -> SugarRecordFinder<NSManagedObject>
     {
-        var finder: SugarRecordFinder = SugarRecordFinder<NSManagedObject>()
+        let finder: SugarRecordFinder = SugarRecordFinder<NSManagedObject>()
         finder.setPredicate(predicateString as String)
         finder.objectClass = self
         finder.stackType = stackType()

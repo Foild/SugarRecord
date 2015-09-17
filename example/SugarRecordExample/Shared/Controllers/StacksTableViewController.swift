@@ -54,7 +54,7 @@ class StacksTableViewController: UITableViewController {
             viewController = storyBoard.instantiateViewControllerWithIdentifier("RealmTableViewController") as? UITableViewController
             
         default:
-            println("View Controller not found for stack: \(stack)")
+            print("View Controller not found for stack: \(stack)")
         }
         
         if (viewController != nil) {
