@@ -90,7 +90,7 @@ extension NSManagedObject
     public class func by<T: StringLiteralConvertible, R: StringLiteralConvertible>(key: T, equalTo value: R) -> SugarRecordFinder<NSManagedObject>
     {
         let finder: SugarRecordFinder = SugarRecordFinder<NSManagedObject>()
-        finder.setPredicate(byKey: "\(key)", andValue: "\(value)")
+        finder.setPredicate(byKey: "\(key)", andValue: "'\(value)'")
         finder.objectClass = self
         finder.stackType = stackType()
         return finder
