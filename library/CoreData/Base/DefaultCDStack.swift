@@ -631,7 +631,6 @@ public extension NSManagedObjectContext
     func mergeChanges(notification: NSNotification) {
         SugarRecordLogger.logLevelInfo.log("Merging changes to context \(self.name)")
         self.mergeChangesFromContextDidSaveNotification(notification)
-        NSNotificationCenter.defaultCenter().postNotificationName(DefaultCDStack.Constants.autoSavingKVOKey, object: nil)
     }
     
     /**
