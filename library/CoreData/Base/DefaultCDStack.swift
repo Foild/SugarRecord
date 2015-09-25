@@ -246,7 +246,7 @@ public class DefaultCDStack: SugarRecordStackProtocol
     internal func addObservers()
     {
         // AutoSaving
-        notificationCenter().addObserverForName(NSManagedObjectContextObjectsDidChangeNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: autoSavingClosure())
+        notificationCenter().addObserverForName(Constants.autoSavingKVOKey, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: autoSavingClosure())
     }
     
     /**
