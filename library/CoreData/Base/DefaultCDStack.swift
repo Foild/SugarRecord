@@ -11,11 +11,6 @@ import CoreData
 
 public class DefaultCDStack: SugarRecordStackProtocol
 {
-    internal struct Constants
-    {
-        static let autoSavingKVOKey: String = "mainContextDidMergeChanges"
-    }
-    
     //MARK: - Class properties
     public var name: String = "DefaultCoreDataStack"
     public var stackDescription: String = "Default core data stack with an efficient context management"
@@ -246,7 +241,7 @@ public class DefaultCDStack: SugarRecordStackProtocol
     internal func addObservers()
     {
         // AutoSaving
-        notificationCenter().addObserverForName(Constants.autoSavingKVOKey, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: autoSavingClosure())
+        notificationCenter().addObserverForName(NSManagedObjectContextObjectsDidChangeNotification, object: self, queue: nil, usingBlock: autoSavingClosure())
     }
     
     /**
@@ -291,10 +286,8 @@ public class DefaultCDStack: SugarRecordStackProtocol
         context = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
         context!.parentContext = parentContext!
         context!.addObserverToGetPermanentIDsBeforeSaving()
-        if #available(iOS 8.0, *) {
+        if context!.respondsToSelector(Selector("name")) {
             context!.name = "Main context"
-        } else {
-            // Fallback on earlier versions
         }
         SugarRecordLogger.logLevelVerbose.log("Created MAIN context")
         return context!
@@ -317,10 +310,8 @@ public class DefaultCDStack: SugarRecordStackProtocol
         context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         context!.persistentStoreCoordinator = persistentStoreCoordinator!
         context!.addObserverToGetPermanentIDsBeforeSaving()
-        if #available(iOS 8.0, *) {
+        if context!.respondsToSelector(Selector("name")) {
             context!.name = "Root saving context"
-        } else {
-            // Fallback on earlier versions
         }
         SugarRecordLogger.logLevelVerbose.log("Created MAIN context")
         return context!
@@ -532,7 +523,7 @@ public class DefaultCDStack: SugarRecordStackProtocol
             }
             if error != nil {
                 let exception: NSException = NSException(name: "Context saving exception", reason: "Pending changes in the root savinv context couldn't be saved", userInfo: ["error": error!])
-                SugarRecord.handle(NSException())
+                SugarRecord.handle(exception)
             }
             else {
                 SugarRecordLogger.logLevelInfo.log("Existing changes persisted to the database")
@@ -567,6 +558,17 @@ public extension NSManagedObjectContext
     */
     func addObserverToGetPermanentIDsBeforeSaving() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("contextWillSave:"), name: NSManagedObjectContextWillSaveNotification, object: self)
+    }
+    
+    /**
+    Adds an observer when the context's objects have changed
+    
+    :param: closure Closure to be executed then objects have changed
+    */
+    func addObserverWhenObjectsChanged(closure: () -> ()) {
+        NSNotificationCenter.defaultCenter().addObserverForName(NSManagedObjectContextObjectsDidChangeNotification, object: self, queue: nil) { (notification) -> Void in
+            _ = closure()
+        }
     }
     
     /**
@@ -627,11 +629,7 @@ public extension NSManagedObjectContext
     - parameter notification: Notification that fired this method call
     */
     func mergeChanges(notification: NSNotification) {
-        if #available(iOS 8.0, *) {
-            SugarRecordLogger.logLevelInfo.log("Merging changes to context \(self.name)")
-        } else {
-            // Fallback on earlier versions
-        }
+        SugarRecordLogger.logLevelInfo.log("Merging changes to context \(self.name)")
         self.mergeChangesFromContextDidSaveNotification(notification)
         NSNotificationCenter.defaultCenter().postNotificationName(DefaultCDStack.Constants.autoSavingKVOKey, object: nil)
     }
