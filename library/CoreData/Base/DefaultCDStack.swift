@@ -245,7 +245,8 @@ public class DefaultCDStack: SugarRecordStackProtocol
     */
     internal func addObservers()
     {
-  
+        // AutoSaving
+        notificationCenter().addObserverForName(NSManagedObjectContextObjectsDidChangeNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: autoSavingClosure())
     }
     
     /**
@@ -261,7 +262,7 @@ public class DefaultCDStack: SugarRecordStackProtocol
     /**
     Closure for AutoSaving changes
     */
-    internal func autoSavingClosure() -> () -> ()
+    internal func autoSavingClosure() -> (notification: NSNotification!) -> ()
     {
         return { [weak self] (notification) -> Void in
             if (self != nil  && self!.autoSaving) {
@@ -316,14 +317,11 @@ public class DefaultCDStack: SugarRecordStackProtocol
         context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         context!.persistentStoreCoordinator = persistentStoreCoordinator!
         context!.addObserverToGetPermanentIDsBeforeSaving()
-        context!.addObserverWhenObjectsChanged { [weak self] () -> () in
-            let closure = self?.autoSavingClosure()
-            closure?()
-        }
-        if context!.respondsToSelector(Selector("name")) {
+        if #available(iOS 8.0, *) {
             context!.name = "Root saving context"
+        } else {
+            // Fallback on earlier versions
         }
-      
         SugarRecordLogger.logLevelVerbose.log("Created MAIN context")
         return context!
     }
@@ -534,8 +532,9 @@ public class DefaultCDStack: SugarRecordStackProtocol
             }
             if error != nil {
                 let exception: NSException = NSException(name: "Context saving exception", reason: "Pending changes in the root savinv context couldn't be saved", userInfo: ["error": error!])
-                SugarRecord.handle(exception)
-            } else {
+                SugarRecord.handle(NSException())
+            }
+            else {
                 SugarRecordLogger.logLevelInfo.log("Existing changes persisted to the database")
             }
             context.reset()
@@ -568,17 +567,6 @@ public extension NSManagedObjectContext
     */
     func addObserverToGetPermanentIDsBeforeSaving() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("contextWillSave:"), name: NSManagedObjectContextWillSaveNotification, object: self)
-    }
-    
-    /**
-    Adds an observer when the context's objects have changed
-    
-    :param: closure Closure to be executed then objects have changed
-    */
-    func addObserverWhenObjectsChanged(closure: () -> ()) {
-        NSNotificationCenter.defaultCenter().addObserverForName(NSManagedObjectContextObjectsDidChangeNotification, object: self, queue: nil) { (notification) -> Void in
-            _ = closure()
-        }
     }
     
     /**
