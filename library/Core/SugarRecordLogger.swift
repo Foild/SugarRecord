@@ -19,7 +19,7 @@ SugarRecordLogger is a logger to show messages coming from the library depending
 */
 public enum SugarRecordLogger: Int {
     /// Current SugarRecord log level
-    static var currentLevel: SugarRecordLogger = .logLevelInfo
+    static var currentLevel: SugarRecordLogger = .logLevelError
     
     /// SugarRecord enum levels
     case logLevelFatal, logLevelError, logLevelWarn, logLevelInfo, logLevelVerbose
