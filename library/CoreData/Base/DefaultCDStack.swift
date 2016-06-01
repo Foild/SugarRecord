@@ -528,7 +528,7 @@ public class DefaultCDStack: SugarRecordStackProtocol
             else {
                 SugarRecordLogger.logLevelInfo.log("Existing changes persisted to the database")
             }
-            context.reset()
+            //context.reset()
         }
         
         // Saving MAIN CONTEXT and then ROOT SAVING CONTEXT
